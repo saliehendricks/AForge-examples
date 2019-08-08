@@ -37,6 +37,30 @@ namespace WpfPostItDetector
                         Alpha = pixelBytes[(y * width + x) * 4 + 3],
                     };
         }
+
+        public static double GePrediction(this BitmapSource source)
+        {
+            double result = 0;
+
+            /*
+             * If you have an image URL:
+                https://eastus.api.cognitive.microsoft.com/customvision/v3.0/Prediction/204f0dbd-4f4c-47ed-9382-120de54c81b5/classify/iterations/Iteration2/url
+                Set Prediction-Key Header to : a8435b876e914433aba85a3f8793a28a
+                Set Content-Type Header to : application/json
+                Set Body to : {"Url": "https://example.com/image.png"}
+                If you have an image file:
+                https://eastus.api.cognitive.microsoft.com/customvision/v3.0/Prediction/204f0dbd-4f4c-47ed-9382-120de54c81b5/classify/iterations/Iteration2/image
+                Set Prediction-Key Header to : a8435b876e914433aba85a3f8793a28a
+                Set Content-Type Header to : application/octet-stream
+                Set Body to : <image file>
+             */
+            //post the image to the api
+
+
+            //wait and return the result
+
+            return result;
+        }
     }
 
     public struct PixelColor
