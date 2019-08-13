@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AForge.Video;
+using ImageProcessor;
 
 namespace AForge.Wpf.IpCamera
 {
@@ -43,7 +45,12 @@ namespace AForge.Wpf.IpCamera
             get { return _useJPEGStream; }
             set { _useJPEGStream = value; this.OnPropertyChanged("UseJpegStream");}
         }
-
+        public string Prediction
+        {
+            get { return _prediction; }
+            set { _prediction = value; this.OnPropertyChanged("Prediction"); }
+        }
+        
         #endregion
 
         #region Private fields
@@ -52,6 +59,7 @@ namespace AForge.Wpf.IpCamera
         private bool _useMJPEGStream;
         private bool _useJPEGStream;
         private IVideoSource _videoSource;
+        private string _prediction;
 
         #endregion
 
@@ -59,7 +67,7 @@ namespace AForge.Wpf.IpCamera
         {
             InitializeComponent();
             this.DataContext = this;
-            ConnectionString = "http://<axis_camera_ip>/axis-cgi/jpg/image.cgi";
+            ConnectionString = "http://127.0.0.1:9911";
             UseJpegStream = true;
         }
 
@@ -94,7 +102,7 @@ namespace AForge.Wpf.IpCamera
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Error on _videoSource_NewFrame:\n" + exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = MessageBox.Show("Error on _videoSource_NewFrame:\n" + exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 StopCamera();
             }
         }
@@ -128,5 +136,26 @@ namespace AForge.Wpf.IpCamera
         }
 
         #endregion
+
+        private async void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            BitmapImage bi = videoPlayer.Source.Clone() as BitmapImage;
+            string folderPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            string fileName = $"{folderPath}\\lulu.png";
+            //save the image
+            bi.Save(fileName);
+
+            //test if its lulu
+
+            Gateway g = new Gateway();
+            var r = await g.MakePredictionRequest(fullfilepath: fileName);
+
+            var pr = PredictionResult.FromJson(r);
+            if (pr.Predictions.Any()) {
+                Prediction = (pr.Predictions.First().Probability * 100).ToString("n");
+            }
+            
+
+        }
     }
 }

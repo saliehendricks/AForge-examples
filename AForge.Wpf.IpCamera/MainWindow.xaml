@@ -56,5 +56,18 @@
                HorizontalAlignment="Left"
                VerticalAlignment="Bottom"
                Content="Select protocol" />
+        <Button Width="67"
+            Height="21"
+            Margin="374,0,0,22"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Click="btnTest_Click"
+            Content="Test" />
+        <Label Width="215"
+            Height="27"
+            Margin="259,0,0,95"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Content="{Binding Prediction}" />
     </Grid>
 </Window>
